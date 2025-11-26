@@ -1,13 +1,13 @@
 const { Team, Player } = require("../models");
 exports.getAllTeams = async (req, res) => {
   try {
-    console.log('getAllTeams called');
+    // console.log('getAllTeams called');
     
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const offset = (page - 1) * limit;
 
-    console.log('About to query database...');
+    // console.log('About to query database...');
     
     const { count, rows } = await Team.findAndCountAll({
       limit,
@@ -15,7 +15,7 @@ exports.getAllTeams = async (req, res) => {
       attributes: ["id", "name", "country", "flag_url", "coach", "group"],
     });
 
-    console.log('Database query successful');
+    // console.log('Database query successful');
 
     res.status(200).json({
       success: true,
@@ -29,8 +29,8 @@ exports.getAllTeams = async (req, res) => {
       },
     });
   } catch (error) {
-    console.log('ERROR CAUGHT:', error.message);
-    console.log('Full error:', error);
+    // console.log('ERROR CAUGHT:', error.message);
+    // console.log('Full error:', error);
     
     res.status(500).json({
       success: false,
