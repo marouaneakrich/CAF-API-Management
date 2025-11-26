@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router(); //create router object
+const authMiddleware = require("../middlewares/authMiddleware")
 //import controller
 const {
   getAllTeams,
@@ -10,8 +11,8 @@ const {
 } = require("../controllers/teamController");
 router.get("/", getAllTeams);
 router.get("/:id", getTeamById);
-router.post("/", createTeam);
-router.put("/:id", updateTeam);
-router.delete("/:id",  deleteTeam);
+router.post("/", authMiddleware, createTeam);           
+router.put("/:id", authMiddleware, updateTeam);         
+router.delete("/:id", authMiddleware, deleteTeam);      
 
 module.exports = router;
