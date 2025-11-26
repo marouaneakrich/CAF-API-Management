@@ -123,11 +123,32 @@ exports.getPlayerById = async (req, res) => {
   }
 };
 
-//Create player
+// Story 3.11: Create player (admin only)
 exports.createPlayer = async (req, res) => {
-  res.status(200).json({ message: "Create Player" });
-};
+  try {
+    const { name, position, number, age, team_id } = req.body;
 
+    const newPlayer = await Player.create({
+      name,
+      position,
+      number,
+      age,
+      team_id,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Player created successfully",
+      data: newPlayer,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error creating player",
+      error: error.message,
+    });
+  }
+};
 //upfate player
 exports.updatePlayer = async (req, res) => {
   res.status(200).json({ message: "Update player" });
