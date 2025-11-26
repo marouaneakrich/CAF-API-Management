@@ -1,7 +1,4 @@
 const { Team, Player } = require("../models");
-
-// Get all teams with pagination
-// Story 3.2: Get all teams with pagination
 exports.getAllTeams = async (req, res) => {
   try {
     console.log('getAllTeams called');
