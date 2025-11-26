@@ -123,7 +123,7 @@ exports.getPlayerById = async (req, res) => {
   }
 };
 
-// Story 3.11: Create player (admin only)
+//  Create player (admin only)
 exports.createPlayer = async (req, res) => {
   try {
     const { name, position, number, age, team_id } = req.body;
@@ -149,12 +149,69 @@ exports.createPlayer = async (req, res) => {
     });
   }
 };
-//upfate player
+//   Update player (admin only)
 exports.updatePlayer = async (req, res) => {
-  res.status(200).json({ message: "Update player" });
+  try {
+    const { id } = req.params;
+    const { name, position, number, age, team_id } = req.body;
+
+    const player = await Player.findByPk(id);
+
+    if (!player) {
+      return res.status(404).json({
+        success: false,
+        message: "Player not found",
+      });
+    }
+
+    await player.update({
+      name: name || player.name,
+      position: position || player.position,
+      number: number || player.number,
+      age: age || player.age,
+      team_id: team_id || player.team_id,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Player updated successfully",
+      data: player,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error updating player",
+      error: error.message,
+    });
+  }
 };
 
-//delete player
+// Story 3.13: Delete player (admin only)
 exports.deletePlayer = async (req, res) => {
-  res.status(200).json({ message: "Delete player" });
+  try {
+    const { id } = req.params;
+
+    const player = await Player.findByPk(id);
+
+    if (!player) {
+      return res.status(404).json({
+        success: false,
+        message: "Player not found",
+      });
+    }
+
+    await player.destroy();
+
+    res.status(200).json({
+      success: true,
+      message: "Player deleted successfully",
+      data: { id: player.id },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error deleting player",
+      error: error.message,
+    });
+  }
 };
