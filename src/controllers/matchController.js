@@ -2,7 +2,7 @@ const { Op } = require("sequelize");
 const Match = require("../models/Match");
 const Team = require("../models/Team");
 
-// GET جميع المباريات
+
 const getAllMatches = async (req, res) => {
   try {
     const matches = await Match.findAll({
@@ -63,7 +63,6 @@ const createMatch = async (req, res) => {
   }
 };
 
-// PUT تعديل مباراة موجودة
 const updateMatch = async (req, res) => {
   try {
     const match = await Match.findByPk(req.params.id);
@@ -76,7 +75,7 @@ const updateMatch = async (req, res) => {
   }
 };
 
-// DELETE حذف مباراة
+
 const deleteMatch = async (req, res) => {
   try {
     const match = await Match.findByPk(req.params.id);
