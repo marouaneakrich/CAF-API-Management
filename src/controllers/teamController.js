@@ -48,6 +48,7 @@ exports.getTeamById = async (req, res) => {
       include: [
         {
           model: Player,
+          as: 'players', 
           attributes: ["id", "name", "position", "number", "age"],
         },
       ],
