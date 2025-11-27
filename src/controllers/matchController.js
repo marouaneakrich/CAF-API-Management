@@ -2,8 +2,8 @@ const { Op } = require("sequelize");
 const Match = require("../models/Match");
 const Team = require("../models/Team");
 
-
-const getAllMatches = async (req, res) => {
+// GET ALL MATCHES
+const getAllMatches = async (req, res, next) => {
   try {
     const matches = await Match.findAll({
       include: [
@@ -12,14 +12,15 @@ const getAllMatches = async (req, res) => {
       ],
       order: [["match_date", "ASC"]],
     });
+
     res.json(matches);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    next(err);
   }
 };
 
-
-const getUpcomingMatches = async (req, res) => {
+// GET UPCOMING MATCHES
+const getUpcomingMatches = async (req, res, next) => {
   try {
     const matches = await Match.findAll({
       where: {
@@ -31,14 +32,15 @@ const getUpcomingMatches = async (req, res) => {
       ],
       order: [["match_date", "ASC"]],
     });
+
     res.json(matches);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    next(err);
   }
 };
 
-
-const getMatchById = async (req, res) => {
+// GET MATCH BY ID
+const getMatchById = async (req, res, next) => {
   try {
     const match = await Match.findByPk(req.params.id, {
       include: [
@@ -46,45 +48,64 @@ const getMatchById = async (req, res) => {
         { model: Team, as: "awayTeam", attributes: ["id", "name"] },
       ],
     });
-    if (!match) return res.status(404).json({ message: "Match not found" });
+
+    if (!match) {
+      const error = new Error("Match not found");
+      error.statusCode = 404;
+      throw error;
+    }
+
     res.json(match);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    next(err);
   }
 };
 
-
-const createMatch = async (req, res) => {
+// CREATE MATCH
+const createMatch = async (req, res, next) => {
   try {
     const newMatch = await Match.create(req.body);
     res.status(201).json(newMatch);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    next(err);
   }
 };
 
-const updateMatch = async (req, res) => {
+// UPDATE MATCH
+const updateMatch = async (req, res, next) => {
   try {
     const match = await Match.findByPk(req.params.id);
-    if (!match) return res.status(404).json({ message: "Match not found" });
+
+    if (!match) {
+      const error = new Error("Match not found");
+      error.statusCode = 404;
+      throw error;
+    }
 
     await match.update(req.body);
+
     res.json({ message: "Match updated successfully", match });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    next(err);
   }
 };
 
-
-const deleteMatch = async (req, res) => {
+// DELETE MATCH
+const deleteMatch = async (req, res, next) => {
   try {
     const match = await Match.findByPk(req.params.id);
-    if (!match) return res.status(404).json({ message: "Match not found" });
+
+    if (!match) {
+      const error = new Error("Match not found");
+      error.statusCode = 404;
+      throw error;
+    }
 
     await match.destroy();
+
     res.json({ message: "Match deleted successfully" });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    next(err);
   }
 };
 

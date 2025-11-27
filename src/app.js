@@ -1,17 +1,41 @@
+
 const express = require("express");
 const app = express();
+require("dotenv").config();
+
+// Middleware
 app.use(express.json());
 
+// Database
 const sequelize = require("./config/database");
-const matchRoutes = require("./routes/matchesRoutes");
 
+// Routes
+const matchRoutes = require("./routes/matchRoutes"); // سمّيت الملف matchRoutes حسب convention
 app.use("/api/matches", matchRoutes);
 
+// Error Handler
+const errorHandler = require("./middlewares/errorHandler");
+app.use(errorHandler);
 
-sequelize
-  .sync({ force: false })
-  .then(() => console.log("All tables synced!"))
-  .then(() =>
-    app.listen(5000, () => console.log("Server running on port 5000"))
-  )
-  .catch((err) => console.log("Error syncing DB:", err));
+// Start Server & Connect to DB
+const PORT = process.env.PORT || 5000;
+
+const startServer = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log("Database connected successfully!");
+
+    await sequelize.sync({ force: false });
+    console.log("All tables synced!");
+
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (err) {
+    console.error("Failed to start server:", err);
+  }
+};
+
+startServer();
+
+module.exports = app;ا
