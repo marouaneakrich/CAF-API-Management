@@ -186,7 +186,7 @@ exports.updatePlayer = async (req, res) => {
   }
 };
 
-// Story 3.13: Delete player (admin only)
+//  Delete player (admin only)
 exports.deletePlayer = async (req, res) => {
   try {
     const { id } = req.params;
