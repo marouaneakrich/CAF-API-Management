@@ -1,23 +1,29 @@
-require('dotenv').config();
-const express = require('express');
+const express = require("express");
+const authRoutes = require("./routes/authRoutes");
+const teamRoutes = require("./routes/teamRoutes");
+const playerRoutes = require ("./routes/playerRoutes");
+const { sequelize } = require('./models');
 const cors = require('cors');
-const sequelize = require('./config/database');
+require('dotenv').config();
+// Sync database (create tables automatically)
+sequelize.sync()
+  .then(() => console.log('Database synced!'))
+  .catch(err => console.log('Database sync error:', err));
+
 
 const app = express();
-
 // Middlewares
 app.use(express.json());
 app.use(cors());
 
-// Import routes
-const authRoutes = require('./routes/authRoutes');
+app.use("/api/auth", authRoutes);
+app.use("/api/teams", teamRoutes);
+app.use("/api/players", playerRoutes);
 
 // Mount routes
 app.use('/api/auth', authRoutes);
 
-// Test database connection and sync
-const PORT = process.env.PORT || 3030;
-
+const PORT = process.env.PORT || 3000;
 sequelize.authenticate()
     .then(() => {
         console.log('Database connected');
@@ -31,3 +37,20 @@ sequelize.authenticate()
     .catch(err => {
         console.error('Database connection failed:', err);
     });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

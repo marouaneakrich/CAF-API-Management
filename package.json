@@ -15,7 +15,6 @@
   },
   "license": "ISC",
   "author": "",
-  "type": "commonjs",
   "main": "src/app.js",
   "directories": {
     "test": "tests"
