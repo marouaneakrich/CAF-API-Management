@@ -1,4 +1,3 @@
-
 const express = require("express");
 const app = express();
 require("dotenv").config();
@@ -10,7 +9,7 @@ app.use(express.json());
 const sequelize = require("./config/database");
 
 // Routes
-const matchRoutes = require("./routes/matchRoutes"); // سمّيت الملف matchRoutes حسب convention
+const matchRoutes = require("./routes/matchRoutes");
 app.use("/api/matches", matchRoutes);
 
 // Error Handler
@@ -38,4 +37,4 @@ const startServer = async () => {
 
 startServer();
 
-module.exports = app;ا
+module.exports = app;

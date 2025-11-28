@@ -2,6 +2,7 @@
   "name": "caf-api-management",
   "version": "1.0.0",
   "description": "This is CAF API MANAGEMENT",
+  "type": "commonjs",
   "keywords": [
     "CAM"
   ],
@@ -15,12 +16,18 @@
   },
   "license": "ISC",
   "author": "",
-  "type": "commonjs",
   "main": "src/app.js",
   "directories": {
     "test": "tests"
   },
   "scripts": {
     "start": "node --watch src/app.js"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "pg": "^8.16.3",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.37.7"
   }
 }
