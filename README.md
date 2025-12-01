@@ -137,6 +137,11 @@ The server will start on `http://localhost:5000`
 | PUT | `/api/matches/:id` | Update match | Admin |
 | DELETE | `/api/matches/:id` | Delete match | Admin |
 
+## UML Class Diagram
+
+![CAF API UML Class Diagram](./assets/images/uml_class_diagram.svg)
+[📥 Download UML Diagram](./assets/uml/uml_class_diagram.svg)
+
 ## 📝 Request Examples
 
 ### Register User
