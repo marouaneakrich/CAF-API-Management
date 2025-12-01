@@ -9,7 +9,7 @@ const {
   updatePlayer,
   deletePlayer,
 }= require ("../controllers/playerController");
-const authMiddleware = require ("../middlewares/authMiddleware")
+const { authentication } = require ("../middlewares/authMiddleware")
 
 //public routes
 router.get("/" , getAllPlayers);
@@ -17,8 +17,8 @@ router.get("/teams/:teamId" , getPlayersByTeam);
 router.get("/:id", getPlayerById);
 
 //protrected routes for admin only
- router.post("/", authMiddleware, createPlayer);
- router.put("/:id" , authMiddleware, updatePlayer);
- router.delete("/:id", authMiddleware , deletePlayer);
+ router.post("/", authentication, createPlayer);
+ router.put("/:id" , authentication, updatePlayer);
+ router.delete("/:id", authentication , deletePlayer);
 
  module.exports = router;
