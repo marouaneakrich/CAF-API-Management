@@ -2,6 +2,7 @@
   "name": "caf-api-management",
   "version": "1.0.0",
   "description": "This is CAF API MANAGEMENT",
+  "type": "commonjs",
   "keywords": [
     "CAM"
   ],

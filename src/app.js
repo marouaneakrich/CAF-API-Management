@@ -1,8 +1,10 @@
 const express = require("express");
 const authRoutes = require("./routes/authRoutes");
 const teamRoutes = require("./routes/teamRoutes");
+const matchRoutes = require("./routes/matchRoutes");
 const playerRoutes = require ("./routes/playerRoutes");
 const { sequelize } = require('./models');
+const errorHandler = require("./middlewares/errorHandler");
 const cors = require('cors');
 require('dotenv').config();
 // Sync database (create tables automatically)
@@ -16,8 +18,12 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+// Error Handler
+app.use(errorHandler);
+
 app.use("/api/auth", authRoutes);
 app.use("/api/teams", teamRoutes);
+app.use("/api/matches", matchRoutes);
 app.use("/api/players", playerRoutes);
 
 // Mount routes
