@@ -1,31 +1,35 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config/database");
+const { DataTypes } = require('sequelize');
 
-const Team = sequelize.define(
-  "Team",
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
+module.exports = (sequelize) => {
+  const Team = sequelize.define('Team', {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-    },
-    logo: {
-      type: DataTypes.STRING,
-      allowNull: true,
+      unique: true
     },
     country: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false
     },
-  },
-  {
-    tableName: "teams",
-    timestamps: true,
-  }
-);
+    flag_url: {
+      type: DataTypes.STRING
+    },
+    coach: {
+      type: DataTypes.STRING
+    },
+    group: {
+      type: DataTypes.STRING,
+      validate: {
+        isIn: [['A', 'B', 'C', 'D', 'E', 'F']]
+      }
+    }
+  });
 
-module.exports = Team;
+  Team.associate = (models) => {
+    Team.hasMany(models.Player, { foreignKey: 'team_id', as: 'players' });
+    Team.hasMany(models.Match, { foreignKey: 'team_home_id', as: 'homeMatches' });
+    Team.hasMany(models.Match, { foreignKey: 'team_away_id', as: 'awayMatches' });
+  };
+
+  return Team;
+};

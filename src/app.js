@@ -1,40 +1,62 @@
 const express = require("express");
-const app = express();
-require("dotenv").config();
-
-// Middleware
-app.use(express.json());
-
-// Database
-const sequelize = require("./config/database");
-
-// Routes
+const authRoutes = require("./routes/authRoutes");
+const teamRoutes = require("./routes/teamRoutes");
 const matchRoutes = require("./routes/matchRoutes");
-app.use("/api/matches", matchRoutes);
+const playerRoutes = require ("./routes/playerRoutes");
+const { sequelize } = require('./models');
+const errorHandler = require("./middlewares/errorHandler");
+const cors = require('cors');
+require('dotenv').config();
+// Sync database (create tables automatically)
+sequelize.sync()
+  .then(() => console.log('Database synced!'))
+  .catch(err => console.log('Database sync error:', err));
+
+
+const app = express();
+// Middlewares
+app.use(express.json());
+app.use(cors());
 
 // Error Handler
-const errorHandler = require("./middlewares/errorHandler");
 app.use(errorHandler);
 
-// Start Server & Connect to DB
-const PORT = process.env.PORT || 5000;
+app.use("/api/auth", authRoutes);
+app.use("/api/teams", teamRoutes);
+app.use("/api/matches", matchRoutes);
+app.use("/api/players", playerRoutes);
 
-const startServer = async () => {
-  try {
-    await sequelize.authenticate();
-    console.log("Database connected successfully!");
+// Mount routes
+app.use('/api/auth', authRoutes);
 
-    await sequelize.sync({ force: false });
-    console.log("All tables synced!");
-
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
+const PORT = process.env.PORT || 3000;
+sequelize.authenticate()
+    .then(() => {
+        console.log('Database connected');
+        return sequelize.sync(); // Creates tables if they don't exist
+    })
+    .then(() => {
+        app.listen(PORT, () => {
+            console.log(`Server running on http://localhost:${PORT}`);
+        });
+    })
+    .catch(err => {
+        console.error('Database connection failed:', err);
     });
-  } catch (err) {
-    console.error("Failed to start server:", err);
-  }
-};
 
-startServer();
 
-module.exports = app;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

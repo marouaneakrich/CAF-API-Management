@@ -1,39 +1,46 @@
 const { DataTypes } = require("sequelize");
-const sequelize = require("../config/database");
-const Team = require("./Team");
 
-const Match = sequelize.define(
-  "Match",
-  {
-    id: {
+module.exports = (sequelize) => {
+  const Match = sequelize.define("Match", {
+    team_home_id: {
       type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
+      allowNull: false,
     },
-    teamhomeid: {
+    team_away_id: {
       type: DataTypes.INTEGER,
-      references: { model: Team, key: "id" },
+      allowNull: false,
     },
-    teamawayid: {
+    score_home: {
       type: DataTypes.INTEGER,
-      references: { model: Team, key: "id" },
+      defaultValue: 0,
     },
-    score_home: { type: DataTypes.INTEGER, defaultValue: 0 },
-    score_away: { type: DataTypes.INTEGER, defaultValue: 0 },
-    match_date: { type: DataTypes.DATE, allowNull: false },
-    stadium: { type: DataTypes.STRING, allowNull: false },
+    score_away: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
+    match_date: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    stadium: {
+      type: DataTypes.STRING,
+    },
     status: {
       type: DataTypes.ENUM("scheduled", "live", "finished"),
       defaultValue: "scheduled",
     },
-  },
-  {
-    tableName: "matches",
-    timestamps: true,
-  }
-);
+  });
 
-Match.belongsTo(Team, { as: "homeTeam", foreignKey: "teamhomeid" });
-Match.belongsTo(Team, { as: "awayTeam", foreignKey: "teamawayid" });
+  Match.associate = (models) => {
+    Match.belongsTo(models.Team, {
+      foreignKey: "team_home_id",
+      as: "homeTeam",
+    });
+    Match.belongsTo(models.Team, {
+      foreignKey: "team_away_id",
+      as: "awayTeam",
+    });
+  };
 
-module.exports = Match;
+  return Match;
+};
