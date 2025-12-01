@@ -140,7 +140,7 @@ The server will start on `http://localhost:5000`
 ## UML Class Diagram
 
 ![CAF API UML Class Diagram](./assets/images/uml_class_diagram.svg)
-[📥 Download UML Diagram](./assets/uml/uml_class_diagram.svg)
+[📥 Download UML Diagram](./assets/uml_class_diagram.drawio)
 
 ## 📝 Request Examples
 
